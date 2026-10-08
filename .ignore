@@ -1,0 +1,29 @@
+# ripgrep search exclusions, NOT an AI security boundary.
+# Keep source, config, lockfiles and small test fixtures searchable.
+.git/
+.venv/
+.venv-linux/
+venv/
+node_modules/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.next/
+/.env
+/build/
+/data/
+/dist/
+/coverage/
+/htmlcov/
+/.coverage
+/logs/
+/runtime/
+/tmp/
+/generated/
+/scan-results/
+/artifacts/
+/test-results/
+/playwright-report/

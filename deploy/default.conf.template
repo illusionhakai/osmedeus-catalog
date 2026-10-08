@@ -1,0 +1,44 @@
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    client_max_body_size 100m;
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    set $engine "${OSMEDEUS_URL}";
+    set $catalog http://catalog:8090;
+    location = /catalog-release.json {
+        add_header Cache-Control "no-store" always;
+        try_files $uri =404;
+    }
+    location = /catalog-live.js {
+        add_header Cache-Control "no-store" always;
+        try_files $uri =404;
+    }
+    location /catalog-api/ {
+        proxy_pass $catalog$request_uri;
+        proxy_set_header Authorization $http_authorization;
+        proxy_set_header Host $host;
+        proxy_read_timeout 120s;
+    }
+    location /osm/ {
+        proxy_pass $engine$request_uri;
+        proxy_set_header Authorization $http_authorization;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+    }
+    location ~ ^/(health|server-info|status|metrics|swagger|api/info)(/|$) {
+        proxy_pass $engine$request_uri;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location / {
+        add_header Cache-Control "no-store" always;
+        try_files $uri $uri.html $uri/index.html @engine;
+    }
+    # Includes dynamic workspace artifact prefixes; preserve upstream behavior.
+    location @engine {
+        proxy_pass $engine$request_uri;
+        proxy_set_header Authorization $http_authorization;
+    }
+}

@@ -1,0 +1,5 @@
+# For a dashboard already compiled and tested by scripts/check_upgrade.py.
+FROM nginx:1.28-alpine
+COPY build/dashboard-static /usr/share/nginx/html
+COPY deploy/default.conf.template /etc/nginx/templates/default.conf.template
+ENV OSMEDEUS_URL=http://host.docker.internal:8002

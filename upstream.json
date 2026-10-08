@@ -1,0 +1,8 @@
+{
+  "companion_version": "0.4.0",
+  "osmedeus_repository": "https://github.com/j3ssie/osmedeus.git",
+  "osmedeus_revision": "9a02ed0f9dbd3d9fd7f006610264016058fd8a0e",
+  "osmedeus_version": "v5.1.1",
+  "trafalgar_revision": "93ab977ecd3503b425cb417b13685bc9d33e2a34",
+  "dashboard_directory": "platform/osmedeus-dashboard"
+}

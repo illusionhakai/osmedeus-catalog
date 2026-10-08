@@ -1,0 +1,15 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY pyproject.toml requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.lock
+COPY bugbounty_catalog ./bugbounty_catalog
+COPY catalog_companion ./catalog_companion
+COPY NOTICE.md ./
+ARG OSMEDEUS_REVISION=9a02ed0f9dbd3d9fd7f006610264016058fd8a0e
+ARG COMPANION_VERSION=0.4.0
+LABEL io.osmedeus-catalog.engine-revision=$OSMEDEUS_REVISION org.opencontainers.image.version=$COMPANION_VERSION
+RUN useradd --uid 10001 --create-home catalog && mkdir /data && chown catalog /data
+USER catalog
+ENV CATALOG_DATA_DIR=/data PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+EXPOSE 8090
+CMD ["uvicorn", "catalog_companion.api:app", "--host", "0.0.0.0", "--port", "8090", "--workers", "1"]

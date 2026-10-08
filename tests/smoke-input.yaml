@@ -1,0 +1,7 @@
+kind: module
+name: catalog-input-smoke
+description: Offline compatibility check; logs inputs without network access
+steps:
+  - name: echo-target
+    type: function
+    function: 'log_info("CATALOG_SMOKE:{{Target}}")'

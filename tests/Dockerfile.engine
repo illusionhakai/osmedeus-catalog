@@ -1,0 +1,10 @@
+FROM golang:1.26-bookworm AS build
+WORKDIR /source
+COPY go.mod go.sum ./
+RUN --mount=type=cache,target=/go/pkg/mod GODEBUG=http2client=0 go mod download
+COPY . .
+ARG REVISION
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOMAXPROCS=2 GODEBUG=http2client=0 go build -p 2 -ldflags "-X main.CommitHash=${REVISION}" -o /osmedeus ./cmd/osmedeus
+FROM debian:bookworm-slim
+COPY --from=build /osmedeus /usr/local/bin/osmedeus
+ENTRYPOINT ["osmedeus"]

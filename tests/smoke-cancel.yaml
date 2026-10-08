@@ -1,0 +1,7 @@
+kind: module
+name: catalog-cancel-smoke
+description: Isolated cancellation contract fixture; no network activity
+steps:
+  - name: wait-for-cancel
+    type: bash
+    command: sleep 20

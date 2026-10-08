@@ -1,0 +1,40 @@
+name: osmedeus-catalog
+services:
+  catalog:
+    image: osmedeus-catalog:${CATALOG_RELEASE:-0.4.0-osm-9a02ed0f9dbd}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.catalog
+    environment:
+      OSMEDEUS_URL: ${OSMEDEUS_URL:-http://host.docker.internal:8002}
+    volumes:
+      - catalog-data:/data
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  gateway:
+    image: osmedeus-catalog-ui:${CATALOG_RELEASE:-0.4.0-osm-9a02ed0f9dbd}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.gateway
+    environment:
+      OSMEDEUS_URL: ${OSMEDEUS_URL:-http://host.docker.internal:8002}
+      NGINX_ENVSUBST_FILTER: ^OSMEDEUS_URL$
+    ports:
+      - 127.0.0.1:${CATALOG_PORT:-8080}:80
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+    # No catalog dependency: the normal dashboard stays available during outages.
+volumes:
+  catalog-data:

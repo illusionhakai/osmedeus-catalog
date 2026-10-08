@@ -1,0 +1,15 @@
+diff --git a/platform/osmedeus-dashboard/components/layout/app-sidebar.tsx b/platform/osmedeus-dashboard/components/layout/app-sidebar.tsx
+--- a/platform/osmedeus-dashboard/components/layout/app-sidebar.tsx
++++ b/platform/osmedeus-dashboard/components/layout/app-sidebar.tsx
+@@ -89,6 +89,11 @@ const navigationGroups = [
+   {
+     label: "Inventory",
+     items: [
++      {
++        name: "Bug Bounty",
++        href: "/bug-bounty",
++        icon: DatabaseIcon,
++      },
+       {
+         name: "Orgs",
+         href: "/inventory/orgs",

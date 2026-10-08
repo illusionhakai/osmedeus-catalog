@@ -1,0 +1,15 @@
+FROM oven/bun:1.3.11 AS dashboard
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends git python3 ca-certificates && rm -rf /var/lib/apt/lists/*
+WORKDIR /companion
+COPY upstream.json ./
+COPY scripts/dashboard.py scripts/build_dashboard.py scripts/deployment.py ./scripts/
+COPY deploy/live-reload.js ./deploy/live-reload.js
+COPY overlay ./overlay
+RUN python3 scripts/build_dashboard.py
+
+FROM nginx:1.28-alpine
+COPY --from=dashboard /companion/build/dashboard-static /usr/share/nginx/html
+COPY deploy/default.conf.template /etc/nginx/templates/default.conf.template
+ENV OSMEDEUS_URL=http://host.docker.internal:8002
+EXPOSE 80

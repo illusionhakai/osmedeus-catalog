@@ -1,0 +1,6 @@
+kind: flow
+name: cidr
+description: Isolated automatic-routing fixture; logs inputs without network access
+modules:
+  - name: catalog-input-smoke
+    path: modules/catalog-input-smoke.yaml

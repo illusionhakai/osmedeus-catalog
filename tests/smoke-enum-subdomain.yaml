@@ -1,0 +1,7 @@
+kind: module
+name: enum-subdomain
+description: Isolated automatic-routing cancellation fixture; no network activity
+steps:
+  - name: wait-for-cancel
+    type: bash
+    command: sleep 20

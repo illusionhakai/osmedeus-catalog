@@ -1,0 +1,6 @@
+kind: flow
+name: domain-standard
+description: Isolated full-recon routing fixture; logs inputs without network access
+modules:
+  - name: catalog-input-smoke
+    path: modules/catalog-input-smoke.yaml
